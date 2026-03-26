@@ -1,8 +1,20 @@
 const postsContainer = document.getElementById('posts');
 
 // Get logged-in user
+ 
+// Get logged-in user
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (!currentUser) {
+    window.location.href = 'index.html';
+} else {
+    // Show user info in nav
+    document.getElementById('userImage').src = currentUser.userImage;
+    document.getElementById('userName').textContent = currentUser.userName;
+}
+
+// Logout function
+function logout() {
+    localStorage.removeItem('currentUser');
     window.location.href = 'index.html';
 }
 
