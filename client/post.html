@@ -1,0 +1,33 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Social Media</title>
+    <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="post.css">
+</head>
+<body>
+
+<header>
+    <h1>Social Media Feed</h1>
+</header>
+
+<div class="container">
+
+    <!-- Create Post -->
+    <div class="create-post">
+        <h2>Create Post</h2>
+        <input type="text" id="userId" placeholder="User ID"><br><br>
+        <input type="text" id="text" placeholder="Post Text"><br><br>
+        <input type="text" id="image" placeholder="Image URL"><br><br>
+        <button onclick="createPost()">Post</button>
+    </div>
+
+    <!-- Posts Feed -->
+    <h2>All Posts</h2>
+    <div id="posts" class="posts-container"></div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

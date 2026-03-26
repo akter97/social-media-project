@@ -1,0 +1,40 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Top Menu -->
+<nav class="top-menu">
+    <span>Social Media</span>
+    <button onclick="logout()">Logout</button>
+</nav>
+
+<div class="container">
+
+    <!-- Post Button Right -->
+    <div class="post-button-container">
+        <button class="open-post-btn" onclick="openPostModal()">Create Post</button>
+    </div>
+
+    <h2>All Posts</h2>
+    <div id="posts" class="posts-container"></div>
+
+</div>
+
+<!-- Post Modal -->
+<div id="postModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closePostModal()">&times;</span>
+        <h2>Create New Post</h2>
+        <textarea type="text" id="text" placeholder="Post Text"></textarea><br><br>
+        <input type="text" id="image" placeholder="Image URL"><br><br>
+        <button onclick="createPost()">Post</button>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
