@@ -1,0 +1,94 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+.signup-container {
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.25);
+    width: 400px;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.signup-container h1 {
+    text-align: center;
+    color: #203a43;
+    margin-bottom: 25px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+.signup-container label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.signup-container input {
+    width: 95%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1.5px solid #2c5364;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.signup-container input:focus {
+    border-color: #0f2027;
+    box-shadow: 0px 0px 8px rgba(15,32,39,0.4);
+}
+
+.signup-container button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.signup-container button:hover {
+    transform: scale(1.03);
+    background: linear-gradient(120deg, #2c5364, #203a43, #0f2027);
+}
+
+#error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.login-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #203a43;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+}

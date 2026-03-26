@@ -1,8 +1,7 @@
 async function login() {
     const userId = document.getElementById('userId').value;
     const password = document.getElementById('password').value;
-    const errorP = document.getElementById('error');
-console.log(userId);
+    const errorP = document.getElementById('error'); 
     if(!userId || !password) {
         errorP.innerText = 'Please enter User ID and Password';
         return;
@@ -27,4 +26,7 @@ console.log(userId);
         console.log(err);
         errorP.innerText = 'Server error, try again';
     }
+}
+function signupPage() {
+    window.location.href = "signup.html"; 
 }

@@ -1,0 +1,33 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Media - Sign Up</title>
+    <link rel="stylesheet" href="signup.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="signup-container">
+    <h1>Create Account</h1> 
+        <label for="userId">User ID (Number)</label>
+        <input type="number" id="userId" name="userId" placeholder="Enter your ID number" required>
+
+        <label for="userName">Full Name</label>
+        <input type="text" id="userName" name="userName" placeholder="Enter your name" required>
+
+        <label for="userPassword">Password</label>
+        <input type="password" id="userPassword" name="userPassword" placeholder="Enter password" required>
+
+        <label for="userImage">Profile Image Link</label>
+        <input type="text" id="userImage" name="userImage" placeholder="Paste image URL" required>
+ 
+         <button onclick="createSignup()">Sign Up</button>
+     
+    <p id="error"></p>
+    <p class="login-link">Already have an account? <a href="index.html">Login here</a></p>
+</div>
+
+<script src="singup.js"></script>
+</body>
+</html> 
+   

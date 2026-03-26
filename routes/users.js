@@ -15,5 +15,27 @@ router.post('/login', (req, res) => {
         }
     });
 });
+ // Sign Up Route
+router.post("/signup", (req, res) => {
+    const { userId, userName, userPassword, userImage } = req.body;
 
+    // Check if userId already exists
+    db.query("SELECT * FROM users WHERE userId = ?", [userId], (err, results) => {
+        if (err) return res.json({ success: false, message: "Database error" });
+
+        if (results.length > 0) {
+            return res.json({ success: false, message: "User ID already exists. Please choose another." });
+        }
+
+        // Insert new user
+        db.query(
+            "INSERT INTO users (userId, userName, userPassword, userImage) VALUES (?, ?, ?, ?)",
+            [userId, userName, userPassword, userImage],
+            (err, result) => {
+                if (err) return res.json({ success: false, message: "Error saving user" });
+                return res.json({ success: true, message: "User registered successfully" });
+            }
+        );
+    });
+});
 module.exports = router;
