@@ -16,6 +16,7 @@ app.use(express.static(path.join(__dirname, "client")));
 // API routes
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/users', require('./routes/users'));
+app.use('/api/comments', require('./routes/comments'));
 
 // Serve index.html
 app.get('/', (req, res) => {
