@@ -1,45 +1,58 @@
 const postsContainer = document.getElementById('posts');
 
-// Get logged-in user from localStorage
+// Get logged-in user
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-if(!currentUser) {
-    window.location.href = 'index.html'; // Not logged in
+if (!currentUser) {
+    window.location.href = 'index.html';
 }
 
-// Logout function
+// Logout
 function logout() {
     localStorage.removeItem('currentUser');
     window.location.href = 'index.html';
 }
 
-
-// Fetch posts from server
+// Fetch Posts
 async function fetchPosts() {
     const res = await fetch('http://localhost:5000/api/posts');
     const posts = await res.json();
     renderPosts(posts);
 }
 
-// Render posts
- function renderPosts(posts) {
+// Render Posts
+ async function renderPosts(posts) {
     postsContainer.innerHTML = '';
 
-    posts.forEach(post => {
+    for (const post of posts) {
+
+        // Fetch comments
+        const res = await fetch(`http://localhost:5000/api/comments/${post.postId}`);
+        const comments = await res.json();
+
+        // First 5 comments
+        let previewHTML = '';
+        const previewComments = comments.slice(0, 3);
+
+        previewComments.forEach(c => {
+            previewHTML += `
+                <div class="comment">
+                    <b>${c.commentedUsername}</b> ${c.commentText}
+                </div>
+            `;
+        });
+
+        // All comments HTML
+        let allCommentsHTML = '';
+        comments.forEach(c => {
+            allCommentsHTML += `
+                <div class="comment">
+                    <b>${c.commentedUsername}</b> ${c.commentText}
+                </div>
+            `;
+        });
+
         const postCard = document.createElement('div');
         postCard.className = 'post-card';
-
-        // Show only last 3 comments
-        let commentsHTML = '';
-        if(post.comments && post.comments.length > 0){
-            const lastComments = post.comments.slice(0, 3);
-            lastComments.forEach(c => {
-                commentsHTML += `
-                    <div class="comment">
-                        <b>${c.commentedUsername}</b> ${c.commentText}
-                    </div>
-                `;
-            });
-        }
 
         postCard.innerHTML = `
             <div class="post-header">
@@ -52,43 +65,121 @@ async function fetchPosts() {
             ${post.postImageUrl ? `<img class="post-image" src="${post.postImageUrl}">` : ''}
 
             <div class="post-actions">
-                <div class="comment-btn" onclick="openComment(${post.postId})">
-                    Comment
-                </div>
-                <div class="comment-count">
-                    ${post.comments ? post.comments.length : 0} Comments
-                </div>
+                <div class="comment-btn" onclick="toggleComments(${post.postId})">Comment</div>
+                <div class="comment-btn" onclick="toggleCommentsAll(${post.postId})">${comments.length} Comments</div>
             </div>
 
-            <div class="comments-preview">
-                ${commentsHTML}
+            <div id="commentBox-${post.postId}" class="comment-box" style="display:none;">
+                <input type="text" id="commentInput-${post.postId}" placeholder="Write a comment...">
+                <button onclick="addComment(${post.postId})">Send</button>
+            </div>
+
+            <!-- Preview comments -->
+            <div id="preview-${post.postId}" class="comments-preview">
+                ${previewHTML || 'No comments yet'}
+            </div>
+
+            <!-- All comments -->
+            <div id="all-${post.postId}" class="comments-preview" style="display:none;">
+                ${allCommentsHTML}
             </div>
         `;
 
         postsContainer.appendChild(postCard);
-    });
+    }
+}
+ function toggleComments(postId) {
+    const preview = document.getElementById(`preview-${postId}`);
+    const all = document.getElementById(`all-${postId}`);
+    const box = document.getElementById(`commentBox-${postId}`);
+
+    if (box.style.display === 'none') { 
+        preview.style.display = 'none';
+        box.style.display = 'flex';
+    } else {
+        all.style.display = 'none';
+        preview.style.display = 'block';
+        box.style.display = 'none';
+    }
+}
+ function toggleCommentsAll(postId) {
+    const preview = document.getElementById(`preview-${postId}`);
+    const all = document.getElementById(`all-${postId}`); 
+
+    if (all.style.display === 'none') {
+        all.style.display = 'block';
+        preview.style.display = 'none'; 
+    } else {
+        all.style.display = 'none';
+        preview.style.display = 'block'; 
+    }
+}
+// Open Comment Box
+function openCommentBox(postId) {
+    const box = document.getElementById(`commentBox-${postId}`);
+    if (box.style.display === 'none') {
+        box.style.display = 'flex';
+    } else {
+        box.style.display = 'none';
+    }
 }
 
-// Create new post
+// Add Comment
+async function addComment(postId) {
+    const input = document.getElementById(`commentInput-${postId}`);
+    const commentText = input.value;
+
+    if (!commentText) return alert('Write a comment');
+
+    await fetch('http://localhost:5000/api/comments', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            commentOfPostId: postId,
+            commentedUserId: currentUser.userId,
+            commentText: commentText
+        })
+    });
+
+    input.value = '';
+    fetchPosts();
+}
+
+
+// Open Post Modal
+function openPostModal() {
+    const modal = document.getElementById('postModal');
+    modal.style.display = 'block';
+}
+
+// Close Post Modal
+function closePostModal() {
+    const modal = document.getElementById('postModal');
+    modal.style.display = 'none';
+}
+// Create Post
 async function createPost() {
-    const postedUserId = document.getElementById('userId').value;
     const postText = document.getElementById('text').value;
     const postImageUrl = document.getElementById('image').value;
 
-    if(!postedUserId || !postText) return alert('User ID and Text required!');
+    if (!postText) return alert('Post text required!');
 
     await fetch('http://localhost:5000/api/posts', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({postedUserId, postText, postImageUrl})
+        body: JSON.stringify({
+            postedUserId: currentUser.userId,
+            postText,
+            postImageUrl
+        })
     });
 
-    document.getElementById('userId').value = '';
     document.getElementById('text').value = '';
     document.getElementById('image').value = '';
 
+    closePostModal();
     fetchPosts();
 }
 
-// Initial load
+// Initial Load
 fetchPosts();
