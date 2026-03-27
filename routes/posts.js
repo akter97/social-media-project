@@ -6,7 +6,7 @@ const db = require('../db');
 router.get('/', (req, res) => {
     const sql = `
     SELECT users.userName AS postedUserName, users.userImage AS postedUserImage, 
-           posts.postId, posts.postedTime, posts.postText, posts.postImageUrl
+           posts.postId, posts.postedTime, posts.postText, posts.postImageUrl,posts.postedUserId
     FROM posts
     INNER JOIN users ON posts.postedUserId = users.userId
     ORDER BY posts.postedTime DESC
@@ -25,6 +25,24 @@ router.post('/', (req, res) => {
     db.query(sql, [postedUserId, postText, postImageUrl], (err, result) => {
         if(err) return res.status(500).json({error: err});
         res.json({message: 'Post created', postId: result.insertId});
+    });
+});
+// Update Post
+router.put('/:id', (req, res) => {
+    const { postText, postImageUrl } = req.body;
+    db.query("UPDATE posts SET postText=?, postImageUrl=? WHERE postId=?",
+        [postText, postImageUrl, req.params.id],
+        (err) => {
+            if (err) return res.json({ success: false, message: "DB error" });
+            res.json({ success: true });
+        });
+});
+
+// Delete Post
+router.delete('/:id', (req, res) => {
+    db.query("DELETE FROM posts WHERE postId=?", [req.params.id], (err) => {
+        if (err) return res.json({ success: false, message: "DB error" });
+        res.json({ success: true });
     });
 });
 
